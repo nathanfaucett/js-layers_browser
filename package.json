@@ -1,15 +1,17 @@
 {
-  "name": "layers",
+  "name": "layers_browser",
   "version": "0.0.1",
   "description": "layers for the browser and node.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathanfaucett/layers.git"
+    "url": "https://github.com/nathanfaucett/layers_browser.git"
   },
   "main": "src/index.js",
   "keywords": [
     "layers",
-    "layers.js"
+    "layers.js",
+    "layers_browser",
+    "layers_browser.js"
   ],
   "author": "Nathan Faucett",
   "license": "BSD-2-Clause",
