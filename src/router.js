@@ -114,11 +114,12 @@ Router.prototype.handler = function(ctx, callback) {
             layer, params;
 
         if (ctx.end || index >= layersLength) {
-            if (ctx.end && !err) {
+            if (ctx.end !== false && !err) {
                 isFunction(callback) && callback(err, ctx);
                 _this.emit("end", err, ctx);
                 return;
             }
+
             if (!err) {
                 err = new Error("404 - Not Found");
             }

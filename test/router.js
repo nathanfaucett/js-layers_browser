@@ -35,7 +35,8 @@ describe("#Router", function() {
                     pathname: "/parent/1/child/1.json",
                     url: "http://localhost:8888/parent/1/child/1.json"
                 },
-                function() {
+                function(err) {
+                    assert.equal(err, undefined);
                     assert.equal(calledMiddleware, true);
                     assert.equal(calledRoute, true);
                 }
