@@ -80,8 +80,10 @@ Router.prototype.middleware = function(err, ctx, next) {
             return;
         }
 
-        if (layer instanceof Route) {
+        if (layer.__end === true) {
             ctx.route = layer;
+        } else {
+            ctx.middleware = layer;
         }
 
         if (layer instanceof Router) {
@@ -145,8 +147,10 @@ Router.prototype.handler = function(ctx, callback) {
             return;
         }
 
-        if (layer instanceof Route) {
+        if (layer.__end === true) {
             ctx.route = layer;
+        } else {
+            ctx.middleware = layer;
         }
 
         if (layer instanceof Router) {
