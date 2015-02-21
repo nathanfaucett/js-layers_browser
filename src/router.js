@@ -116,8 +116,8 @@ Router.prototype.handler = function(ctx, callback) {
         var msg, code,
             layer, params;
 
-        if (ctx.end || index >= layersLength) {
-            if (ctx.end !== false && !err) {
+        if (ctx.forceEnd || index >= layersLength) {
+            if (ctx.forceEnd !== false && !err) {
                 isFunction(callback) && callback(err, ctx);
                 _this.emit("end", err, ctx);
                 return;
@@ -129,10 +129,6 @@ Router.prototype.handler = function(ctx, callback) {
 
             msg = err.stack || (err.toString ? err.toString() : err + "");
             code = err.statusCode || err.status || err.code || 500;
-
-            if (ctx.end) {
-                console.error(err);
-            }
 
             isFunction(callback) && callback(err, ctx);
             _this.emit("end", err, ctx);
