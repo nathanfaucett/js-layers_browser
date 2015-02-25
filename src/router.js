@@ -69,35 +69,33 @@ Router.prototype.middleware = function(err, ctx, next) {
 
         if (index >= layersLength) {
             next(err);
-            return;
-        }
-
-        layer = layers[index++];
-        ctx.next = done;
-
-        if (!layer || !(params = layer.match(pathname))) {
-            done(err);
-            return;
-        }
-
-        if (layer.__end === true) {
-            ctx.route = layer;
         } else {
-            ctx.middleware = layer;
-        }
+            layer = layers[index++];
+            ctx.next = done;
 
-        if (layer instanceof Router) {
-            ctx.params = ctx.scopeParams = params;
-        } else {
-            ctx.params = extend(params, ctx.scopeParams);
-        }
+            if (!layer || !(params = layer.match(pathname))) {
+                done(err);
+            } else {
+                if (layer.__end === true) {
+                    ctx.route = layer;
+                } else {
+                    ctx.middleware = layer;
+                }
 
-        ctx.layer = layer;
+                if (layer instanceof Router) {
+                    ctx.params = ctx.scopeParams = params;
+                } else {
+                    ctx.params = extend({}, ctx.scopeParams, params);
+                }
 
-        try {
-            layer.__handle(err, ctx, done);
-        } catch (e) {
-            done(e);
+                ctx.layer = layer;
+
+                try {
+                    layer.__handle(err, ctx, done);
+                } catch (e) {
+                    done(e);
+                }
+            }
         }
     }(err));
 };
@@ -121,58 +119,52 @@ Router.prototype.handler = function(ctx, callback) {
     this.emit("start", ctx);
 
     (function next(err) {
-        var msg, code,
-            layer, params;
+        var msg, code, layer, params;
 
         if (ctx.forceEnd || index >= layersLength) {
-            if (ctx.forceEnd !== false && !err) {
+            if (!err && (ctx.route || ctx.forceEnd !== false)) {
                 if (isFunction(callback)) {
                     callback(err, ctx);
                 }
                 _this.emit("end", err, ctx);
-                return;
+            } else {
+                err = err || new HttpError(404);
+
+                msg = err.stack || (err.toString ? err.toString() : err + "");
+                code = err.statusCode || err.status || err.code || 500;
+
+                if (isFunction(callback)) {
+                    callback(err, ctx);
+                }
+                _this.emit("end", err, ctx);
             }
-
-            if (!err) {
-                err = new HttpError(404);
-            }
-
-            msg = err.stack || (err.toString ? err.toString() : err + "");
-            code = err.statusCode || err.status || err.code || 500;
-
-            if (isFunction(callback)) {
-                callback(err, ctx);
-            }
-            _this.emit("end", err, ctx);
-            return;
-        }
-
-        layer = layers[index++];
-        ctx.next = next;
-
-        if (!layer || !(params = layer.match(pathname))) {
-            next(err);
-            return;
-        }
-
-        if (layer.__end === true) {
-            ctx.route = layer;
         } else {
-            ctx.middleware = layer;
-        }
+            layer = layers[index++];
+            ctx.next = next;
 
-        if (layer instanceof Router) {
-            ctx.params = ctx.scopeParams = params;
-        } else {
-            ctx.params = extend(params, ctx.scopeParams);
-        }
+            if (!layer || !(params = layer.match(pathname))) {
+                next(err);
+            } else {
+                if (layer.__end === true) {
+                    ctx.route = layer;
+                } else {
+                    ctx.middleware = layer;
+                }
 
-        ctx.layer = layer;
+                if (layer instanceof Router) {
+                    ctx.params = ctx.scopeParams = params;
+                } else {
+                    ctx.params = extend({}, ctx.scopeParams, params);
+                }
 
-        try {
-            layer.__handle(err, ctx, next);
-        } catch (e) {
-            next(e);
+                ctx.layer = layer;
+
+                try {
+                    layer.__handle(err, ctx, next);
+                } catch (e) {
+                    next(e);
+                }
+            }
         }
     }());
 };
