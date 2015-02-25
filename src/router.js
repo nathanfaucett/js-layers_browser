@@ -102,6 +102,11 @@ Router.prototype.middleware = function(err, ctx, next) {
     }(err));
 };
 
+function end() {
+    this.forceEnd = true;
+    return this;
+}
+
 Router.prototype.handler = function(ctx, callback) {
     var _this = this,
         pathname = ctx.pathname || (ctx.pathname = urls.parse(ctx.url).pathname),
@@ -109,7 +114,10 @@ Router.prototype.handler = function(ctx, callback) {
         index = 0,
         layersLength = layers.length;
 
+    ctx.end = end;
+    ctx.forceEnd = false;
     ctx.scopeParams = {};
+
     this.emit("start", ctx);
 
     (function next(err) {
@@ -118,7 +126,9 @@ Router.prototype.handler = function(ctx, callback) {
 
         if (ctx.forceEnd || index >= layersLength) {
             if (ctx.forceEnd !== false && !err) {
-                isFunction(callback) && callback(err, ctx);
+                if (isFunction(callback)) {
+                    callback(err, ctx);
+                }
                 _this.emit("end", err, ctx);
                 return;
             }
@@ -130,7 +140,9 @@ Router.prototype.handler = function(ctx, callback) {
             msg = err.stack || (err.toString ? err.toString() : err + "");
             code = err.statusCode || err.status || err.code || 500;
 
-            isFunction(callback) && callback(err, ctx);
+            if (isFunction(callback)) {
+                callback(err, ctx);
+            }
             _this.emit("end", err, ctx);
             return;
         }

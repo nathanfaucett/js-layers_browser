@@ -27,6 +27,7 @@ describe("#Router", function() {
                 },
                 function(ctx, next) {
                     calledRoute = true;
+                    ctx.end();
                     next();
                 }
             );
