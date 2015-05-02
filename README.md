@@ -20,13 +20,12 @@ router.use(
     }
 );
 
-router.route() // same as "/"
-    .get(
-        function home(req, res, next) {
-            // render home stuff
-            next();
-        }
-    );
+router.route( // same as "/"
+    function home(req, res, next) {
+        // render home stuff
+        next();
+    }
+);
 
 posts.use(
     function middleware(req, res, next) {
