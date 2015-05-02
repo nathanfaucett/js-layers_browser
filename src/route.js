@@ -5,7 +5,8 @@ var isArray = require("is_array"),
     Layer = require("./layer");
 
 
-var LayerPrototype = Layer.prototype;
+var LayerPrototype = Layer.prototype,
+    RoutePrototype;
 
 
 module.exports = Route;
@@ -15,12 +16,13 @@ function Route(path, parent, end) {
     Layer.call(this, path, parent, end);
 }
 Layer.extend(Route);
+RoutePrototype = Route.prototype;
 
 Route.create = function(path, parent, end) {
     return new Route(path, parent, end);
 };
 
-Route.prototype.construct = function(path, parent, end) {
+RoutePrototype.construct = function(path, parent, end) {
 
     LayerPrototype.construct.call(this, path, parent, end);
 
@@ -29,7 +31,7 @@ Route.prototype.construct = function(path, parent, end) {
     return this;
 };
 
-Route.prototype.destruct = function() {
+RoutePrototype.destruct = function() {
 
     LayerPrototype.destruct.call(this);
 
@@ -38,7 +40,7 @@ Route.prototype.destruct = function() {
     return this;
 };
 
-Route.prototype.__handle = function(err, ctx, next) {
+RoutePrototype.__handle = function(err, ctx, next) {
     var stack = this.__stack,
         index = 0,
         stackLength = stack.length;
@@ -75,13 +77,13 @@ Route.prototype.__handle = function(err, ctx, next) {
     }
 };
 
-Route.prototype.mount = function(handlers) {
+RoutePrototype.mount = function(handlers) {
 
     mount(this.__stack, isArray(handlers) ? handlers : fastSlice(arguments));
     return this;
 };
 
-Route.prototype.unmount = function(handlers) {
+RoutePrototype.unmount = function(handlers) {
 
     unmount(this.__stack, isArray(handlers) ? handlers : fastSlice(arguments));
     return this;

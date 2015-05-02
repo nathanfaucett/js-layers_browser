@@ -13,7 +13,8 @@ var isFunction = require("is_function"),
     Layer = require("./layer");
 
 
-var LayerPrototype = Layer.prototype;
+var LayerPrototype = Layer.prototype,
+    RouterPrototype;
 
 
 module.exports = Router;
@@ -23,15 +24,14 @@ function Router(path, parent) {
     Layer.call(this, path, parent, false);
 }
 Layer.extend(Router);
+RouterPrototype = Router.prototype;
 
 Router.create = function(path, parent) {
     return new Router(path, parent);
 };
 
-Router.prototype.construct = function(path, parent) {
+RouterPrototype.construct = function(path, parent) {
     var _this = this;
-
-    LayerPrototype.construct.call(this, path, parent, false);
 
     this.__layers = [];
 
@@ -42,10 +42,12 @@ Router.prototype.construct = function(path, parent) {
         _this.middleware(err, ctx, next);
     };
 
+    LayerPrototype.construct.call(this, path, parent, false);
+
     return this;
 };
 
-Router.prototype.destruct = function() {
+RouterPrototype.destruct = function() {
 
     LayerPrototype.destruct.call(this);
 
@@ -58,7 +60,7 @@ Router.prototype.destruct = function() {
     return this;
 };
 
-Router.prototype.middleware = function(err, ctx, next) {
+RouterPrototype.middleware = function(err, ctx, next) {
     var pathname = ctx.pathname || (ctx.pathname = urls.parse(ctx.url).pathname),
         layers = this.__layers,
         index = 0,
@@ -105,7 +107,7 @@ function end() {
     return this;
 }
 
-Router.prototype.handler = function(ctx, callback) {
+RouterPrototype.handler = function(ctx, callback) {
     var _this = this,
         pathname = ctx.pathname || (ctx.pathname = urls.parse(ctx.url).pathname),
         layers = this.__layers,
@@ -169,7 +171,7 @@ Router.prototype.handler = function(ctx, callback) {
     }());
 };
 
-Router.prototype.find = function(path, type) {
+RouterPrototype.find = function(path, type) {
     var layers = this.__layers,
         i = layers.length,
         layer;
@@ -185,15 +187,32 @@ Router.prototype.find = function(path, type) {
         } else if ((type === "route" || type === "middleware") && layer instanceof Route) {
             return layer;
         } else if (layer instanceof Router) {
-            if (type === "scope" || type === "router") return layer;
-            return layer.find(path, type);
+            if (type === "scope" || type === "router") {
+                return layer;
+            } else {
+                return layer.find(path, type);
+            }
         }
     }
 
     return null;
 };
 
-Router.prototype.unmount = function(path, type) {
+RouterPrototype.setPath = function(path) {
+    var layers = this.__layers,
+        i = -1,
+        il = layers.length - 1;
+
+    LayerPrototype.setPath.call(this, path);
+
+    while (i++ < il) {
+        layers[i].recompile();
+    }
+
+    return this;
+};
+
+RouterPrototype.unmount = function(path, type) {
     var layer = this.find(path, type || (type = "route")),
         scope, layers, index;
 
@@ -211,7 +230,7 @@ Router.prototype.unmount = function(path, type) {
     return this;
 };
 
-Router.prototype.use = function(path) {
+RouterPrototype.use = function(path) {
     var _this = this,
         layers = this.__layers,
         middleware, middlewareStack, stack;
@@ -263,7 +282,7 @@ Router.prototype.use = function(path) {
     return this;
 };
 
-Router.prototype.route = function(path) {
+RouterPrototype.route = function(path) {
     var layers = this.__layers,
         route, stack;
 
@@ -284,7 +303,7 @@ Router.prototype.route = function(path) {
     return this;
 };
 
-Router.prototype.scope = function(path) {
+RouterPrototype.scope = function(path) {
     var layers = this.__layers,
         router;
 
