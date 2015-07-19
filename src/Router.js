@@ -138,7 +138,7 @@ Router.prototype.handler = function(ctx, callback) {
             ctx.next = next;
 
             try {
-                if (length >= 4) {
+                if (length >= 3) {
                     fn(error, ctx, next);
                 } else {
                     if (!error) {
@@ -240,7 +240,7 @@ Router.prototype.use = function(path) {
             if (isFunction(handler.middleware)) {
                 mw = handler.middleware;
 
-                if (mw.length >= 4) {
+                if (mw.length >= 3) {
                     middlewareStack[middlewareStack.length] = function(err, ctx, next) {
                         handler.middleware(err, ctx, next);
                     };

@@ -16,11 +16,11 @@ function mount(stack, handlers) {
             if (isFunction(handler.middleware)) {
                 mw = handler.middleware;
 
-                if (mw.length >= 4) {
+                if (mw.length >= 3) {
                     stack[stack.length] = function(err, ctx, next) {
                         handler.middleware(err, ctx, next);
                     };
-                } else if (mw.length <= 3) {
+                } else if (mw.length <= 2) {
                     stack[stack.length] = function(ctx, next) {
                         handler.middleware(ctx, next);
                     };
