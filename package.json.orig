@@ -1,17 +1,24 @@
 {
+<<<<<<< HEAD
+  "name": "layers",
+=======
   "name": "layers_browser",
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
   "version": "0.0.1",
   "description": "layers for the browser and node.js",
   "repository": {
     "type": "git",
+<<<<<<< HEAD
+    "url": "https://github.com/nathanfaucett/layers.git"
+=======
     "url": "https://github.com/nathanfaucett/layers_browser.git"
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
   },
   "main": "src/index.js",
   "keywords": [
     "layers",
-    "layers.js",
-    "layers_browser",
-    "layers_browser.js"
+<<<<<<< HEAD
+    "layers.js"
   ],
   "scripts": {
     "test": "npm run test-node",
@@ -19,6 +26,12 @@
     "test-node-raw": "node ./test",
     "test-browser-local": "zuul --local 8080 --ui tape -- ./test"
   },
+=======
+    "layers.js",
+    "layers_browser",
+    "layers_browser.js"
+  ],
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
   "author": "Nathan Faucett",
   "license": "BSD-2-Clause",
   "readmeFilename": "README.md",
@@ -26,9 +39,13 @@
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jsbeautifier": "^0.2.7",
+<<<<<<< HEAD
     "tap-spec": "^4.0.2",
     "tape": "^4.0.1",
     "zuul": "^3.2.0"
+=======
+    "mocha": "^2.1.0"
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
   },
   "dependencies": {
     "http_error": "nathanfaucett/http_error",
@@ -38,8 +55,11 @@
     "for_each": "nathanfaucett/for_each",
     "event_emitter": "nathanfaucett/event_emitter",
     "path_to_regexp": "nathanfaucett/path_to_regexp",
+<<<<<<< HEAD
     "keys": "nathanfaucett/keys",
     "filter": "nathanfaucett/filter",
+=======
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
     "map": "nathanfaucett/map",
     "url_path": "nathanfaucett/url_path",
     "is_function": "nathanfaucett/is_function",
@@ -48,6 +68,11 @@
     "is_array": "nathanfaucett/is_array",
     "index_of": "nathanfaucett/index_of",
     "fast_slice": "nathanfaucett/fast_slice",
+<<<<<<< HEAD
+    "inherits": "nathanfaucett/inherits",
+    "methods": "nathanfaucett/methods"
+=======
     "inherits": "nathanfaucett/inherits"
+>>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
   }
 }

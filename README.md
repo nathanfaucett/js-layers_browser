@@ -1,57 +1,51 @@
-layers
+layers_browser
 =======
 
 layers for the browser and node.js
 
 ```javascript
-var layers = require("layers");
+var layers = require("layers_browser");
 
 
 var router = new layers.Router(), // layers.Router.create()
 
-    // create new router layer under the "/sessions" path
-    sessions = router.scope("sessions");
+    // create new router layer under the "/posts" path
+    posts = router.scope("posts");
 
 
 // can be a object with a middleware function
 router.use(
-    function cors(ctx, next) {
+    function middleware(req, res, next) {
         // cors middleware
-    },
-    function bodyParser(ctx, next) {
-        // body parser middleware
     }
 );
 
-router.route() // same as "/"
-    .get(
-        function getHome(ctx, next) {
-            // send home info
-            next();
-        }
-    );
-
-sessions.use(
-    function middleware(ctx, next) {
-        // do some work on "/sessions/**"
+router.route( // same as "/"
+    function home(req, res, next) {
+        // render home stuff
+        next();
     }
 );
 
-sessions.route("sign_in")
-    .get(
-        function signIn(ctx, next) {
-            // return user if signed in
-            next();
-        }
-    );
+posts.use(
+    function middleware(req, res, next) {
+        // do some work on "/posts/**"
+    }
+);
 
-sessions.route("sign_up")
-    .post(
-        function signIn(ctx, next) {
-            // sign user in
-            next();
-        }
-    );
+posts.route( // "/posts"
+    function signIn(req, res, next) {
+        // return user if signed in
+        next();
+    }
+);
+
+posts.route("/:id[0-9]", // "/posts/:id[0-9]"
+    function signIn(req, res, next) {
+        // sign user in
+        next();
+    }
+);
 
 
 ```
