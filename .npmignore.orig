@@ -1,9 +1,0 @@
-test
-<<<<<<< HEAD
-benchmark
-=======
->>>>>>> f0558b989fba442eddba0c3a891c632e276e8983
-node_modules
-npm-debug.log
-.npmignore
-.gitignore
