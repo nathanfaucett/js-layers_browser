@@ -1,7 +1,7 @@
 var EventEmitter = require("event_emitter"),
     pathToRegexp = require("path_to_regexp"),
     isString = require("is_string"),
-    map = require("map"),
+    arrayMap = require("array-map"),
     filterParams = require("./utils/filterParams"),
     cleanPath = require("./utils/cleanPath"),
     buildPath = require("./utils/buildPath");
@@ -82,7 +82,7 @@ Layer.prototype.toJSON = function(json) {
 
     json.path = this.__path;
 
-    json.params = map(this.__params, function(param) {
+    json.params = arrayMap(this.__params, function(param) {
         return param.toJSON();
     });
 
