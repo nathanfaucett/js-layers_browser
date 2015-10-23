@@ -1,10 +1,13 @@
 var EventEmitter = require("event_emitter"),
-    pathToRegexp = require("path_to_regexp"),
+    pathToRegExp = require("path_to_regexp"),
     isString = require("is_string"),
     arrayMap = require("array-map"),
     filterParams = require("./utils/filterParams"),
     cleanPath = require("./utils/cleanPath"),
     buildPath = require("./utils/buildPath");
+
+
+var LayerPrototype;
 
 
 module.exports = Layer;
@@ -17,12 +20,13 @@ function Layer(path, parent, end) {
     this.construct(path, parent, end);
 }
 EventEmitter.extend(Layer);
+LayerPrototype = Layer.prototype;
 
 Layer.create = function(path, parent, end) {
     return (new Layer(path, parent, end));
 };
 
-Layer.prototype.construct = function(path, parent, end) {
+LayerPrototype.construct = function(path, parent, end) {
 
     this.__parent = parent;
     this.__regexp = null;
@@ -37,7 +41,7 @@ Layer.prototype.construct = function(path, parent, end) {
     return this;
 };
 
-Layer.prototype.destructor = function() {
+LayerPrototype.destructor = function() {
 
     this.__parent = null;
     this.__regexp = null;
@@ -50,7 +54,7 @@ Layer.prototype.destructor = function() {
     return this;
 };
 
-Layer.prototype.setPath = function(path) {
+LayerPrototype.setPath = function(path) {
 
     this.__relativePath = cleanPath(path);
     this.__path = buildPath(this.__parent, this.__relativePath);
@@ -59,24 +63,24 @@ Layer.prototype.setPath = function(path) {
     return this;
 };
 
-Layer.prototype.match = function(path) {
+LayerPrototype.match = function(path) {
     return filterParams(this.__regexp, this.__params, path);
 };
 
-Layer.prototype.format = function() {
-    return pathToRegexp.format(this.__path);
+LayerPrototype.format = function() {
+    return pathToRegExp.format(this.__path);
 };
 
-Layer.prototype.recompile = function() {
+LayerPrototype.recompile = function() {
     return this.setPath(this.__relativePath);
 };
 
-Layer.prototype.compile = function() {
-    this.__regexp = pathToRegexp(this.__path, this.__params, this.__end);
+LayerPrototype.compile = function() {
+    this.__regexp = pathToRegExp(this.__path, this.__params, this.__end);
     return this;
 };
 
-Layer.prototype.toJSON = function(json) {
+LayerPrototype.toJSON = function(json) {
 
     json = json || {};
 

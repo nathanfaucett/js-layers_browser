@@ -13,7 +13,8 @@ var isFunction = require("is_function"),
     Layer = require("./Layer");
 
 
-var LayerPrototype = Layer.prototype;
+var LayerPrototype = Layer.prototype,
+    RouterPrototype;
 
 
 module.exports = Router;
@@ -23,14 +24,15 @@ function Router(path, parent) {
     Layer.call(this, path, parent, false);
 }
 Layer.extend(Router);
+RouterPrototype = Router.prototype;
 
 Router.create = function(path, parent) {
     return new Router(path, parent);
 };
 
-Router.prototype.__isRouter__ = true;
+RouterPrototype.__isRouter__ = true;
 
-Router.prototype.construct = function(path, parent) {
+RouterPrototype.construct = function(path, parent) {
 
     this.__layers = [];
 
@@ -43,7 +45,7 @@ Router.prototype.construct = function(path, parent) {
     return this;
 };
 
-Router.prototype.destructor = function() {
+RouterPrototype.destructor = function() {
 
     LayerPrototype.destructor.call(this);
 
@@ -56,7 +58,7 @@ Router.prototype.destructor = function() {
     return this;
 };
 
-Router.prototype.enqueue = function(queue, parentData, pathname) {
+RouterPrototype.enqueue = function(queue, parentData, pathname) {
     var layers = this.__layers,
         i = -1,
         il = layers.length - 1,
@@ -107,7 +109,7 @@ function end() {
     return this;
 }
 
-Router.prototype.handler = function(ctx, callback) {
+RouterPrototype.handler = function(ctx, callback) {
     var _this = this,
         queue = [],
         pathname = ctx.pathname || (ctx.pathname = urls.parse(ctx.url).pathname),
@@ -154,7 +156,7 @@ Router.prototype.handler = function(ctx, callback) {
     }());
 };
 
-Router.prototype.find = function(path, type) {
+RouterPrototype.find = function(path, type) {
     var layers = this.__layers,
         i = layers.length,
         layer;
@@ -183,7 +185,7 @@ Router.prototype.find = function(path, type) {
     return undefined;
 };
 
-Router.prototype.setPath = function(path) {
+RouterPrototype.setPath = function(path) {
     var layers = this.__layers,
         i = -1,
         il = layers.length - 1;
@@ -197,7 +199,7 @@ Router.prototype.setPath = function(path) {
     return this;
 };
 
-Router.prototype.unmount = function(path, type) {
+RouterPrototype.unmount = function(path, type) {
     var layer = this.find(path, type || (type = "route")),
         scope, layers, index;
 
@@ -215,7 +217,7 @@ Router.prototype.unmount = function(path, type) {
     return this;
 };
 
-Router.prototype.use = function(path) {
+RouterPrototype.use = function(path) {
     var _this = this,
         layers = this.__layers,
         middleware, middlewareStack, stack;
@@ -267,7 +269,7 @@ Router.prototype.use = function(path) {
     return this;
 };
 
-Router.prototype.route = function(path) {
+RouterPrototype.route = function(path) {
     var layers = this.__layers,
         route, stack;
 
@@ -282,14 +284,13 @@ Router.prototype.route = function(path) {
     layers[layers.length] = route;
 
     if (stack.length !== 0) {
-        layers[layers.length] = route;
         route.mount(stack);
     }
 
     return route;
 };
 
-Router.prototype.scope = function(path) {
+RouterPrototype.scope = function(path) {
     var layers = this.__layers,
         router;
 

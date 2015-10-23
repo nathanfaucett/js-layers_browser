@@ -5,7 +5,8 @@ var isArray = require("is_array"),
     Layer = require("./Layer");
 
 
-var LayerPrototype = Layer.prototype;
+var LayerPrototype = Layer.prototype,
+    RoutePrototype;
 
 
 module.exports = Route;
@@ -15,14 +16,15 @@ function Route(path, parent, end) {
     Layer.call(this, path, parent, end);
 }
 Layer.extend(Route);
+RoutePrototype = Route.prototype;
 
 Route.create = function(path, parent, end) {
     return new Route(path, parent, end);
 };
 
-Route.prototype.__isRoute__ = true;
+RoutePrototype.__isRoute__ = true;
 
-Route.prototype.construct = function(path, parent, end) {
+RoutePrototype.construct = function(path, parent, end) {
 
     LayerPrototype.construct.call(this, path, parent, end);
 
@@ -32,7 +34,7 @@ Route.prototype.construct = function(path, parent, end) {
     return this;
 };
 
-Route.prototype.destructor = function() {
+RoutePrototype.destructor = function() {
 
     LayerPrototype.destructor.call(this);
 
@@ -41,7 +43,7 @@ Route.prototype.destructor = function() {
     return this;
 };
 
-Route.prototype.enqueue = function(queue, parentData /*, pathname */ ) {
+RoutePrototype.enqueue = function(queue, parentData /*, pathname */ ) {
     var stack = this.__stack,
         i = -1,
         il = stack.length - 1;
@@ -51,12 +53,12 @@ Route.prototype.enqueue = function(queue, parentData /*, pathname */ ) {
     }
 };
 
-Route.prototype.mount = function(handlers) {
+RoutePrototype.mount = function(handlers) {
     mount(this.__stack, isArray(handlers) ? handlers : arguments);
     return this;
 };
 
-Route.prototype.unmount = function(handlers) {
+RoutePrototype.unmount = function(handlers) {
     unmount(this.__stack, isArray(handlers) ? handlers : arguments);
     return this;
 };
