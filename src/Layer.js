@@ -1,7 +1,7 @@
-var EventEmitter = require("event_emitter"),
-    pathToRegExp = require("path_to_regexp"),
-    isString = require("is_string"),
-    arrayMap = require("array-map"),
+var EventEmitter = require("@nathanfaucett/event_emitter"),
+    pathToRegExp = require("@nathanfaucett/path_to_regexp"),
+    isString = require("@nathanfaucett/is_string"),
+    arrayMap = require("@nathanfaucett/array-map"),
     filterParams = require("./utils/filterParams"),
     cleanPath = require("./utils/cleanPath"),
     buildPath = require("./utils/buildPath");

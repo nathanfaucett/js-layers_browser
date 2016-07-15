@@ -51,7 +51,7 @@ tape("#Router handler(ctx : Request, ctx : Response[, callback(err : Error, ctx)
 
     router.handler({
             pathname: "/parent/1/child/1.json",
-            url: "http://localhost:8888/parent/1/child/1.json"
+            url: "http://localhost:9999/parent/1/child/1.json"
         },
         function() {
             assert.equal(calledMiddleware, true);
@@ -62,7 +62,7 @@ tape("#Router handler(ctx : Request, ctx : Response[, callback(err : Error, ctx)
 
     router.handler({
             pathname: "/not_found",
-            url: "http://localhost:8888/not_found"
+            url: "http://localhost:9999/not_found"
         },
         function(err) {
             assert.equal(err.message, "404 - Not Found");

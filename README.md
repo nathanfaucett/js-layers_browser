@@ -4,7 +4,7 @@ layers_browser
 layers for the browser and node.js
 
 ```javascript
-var layers = require("layers_browser");
+var layers = require("@nathanfaucett/layers_browser");
 
 
 var router = new layers.Router(), // layers.Router.create()
