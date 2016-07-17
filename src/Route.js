@@ -5,15 +5,18 @@ var isArray = require("@nathanfaucett/is_array"),
     Layer = require("./Layer");
 
 
-var LayerPrototype = Layer.prototype,
-    RoutePrototype;
+var RoutePrototype;
 
 
 module.exports = Route;
 
 
 function Route(path, parent, end) {
+
     Layer.call(this, path, parent, end);
+
+    this.__stack = [];
+    this.__isMiddleware__ = false;
 }
 Layer.extend(Route);
 RoutePrototype = Route.prototype;
@@ -23,25 +26,6 @@ Route.create = function(path, parent, end) {
 };
 
 RoutePrototype.__isRoute__ = true;
-
-RoutePrototype.construct = function(path, parent, end) {
-
-    LayerPrototype.construct.call(this, path, parent, end);
-
-    this.__stack = [];
-    this.__isMiddleware__ = false;
-
-    return this;
-};
-
-RoutePrototype.destructor = function() {
-
-    LayerPrototype.destructor.call(this);
-
-    this.__stack = null;
-
-    return this;
-};
 
 RoutePrototype.enqueue = function(queue, parentData /*, pathname */ ) {
     var stack = this.__stack,

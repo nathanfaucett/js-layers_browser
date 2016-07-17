@@ -6,8 +6,8 @@ var isFunction = require("@nathanfaucett/is_function"),
     fastSlice = require("@nathanfaucett/fast_slice"),
     urls = require("@nathanfaucett/urls"),
     HttpError = require("@nathanfaucett/http_error"),
+    cleanPath = require("@nathanfaucett/layer/src/cleanPath"),
 
-    cleanPath = require("./utils/cleanPath"),
     Data = require("./Data"),
     Route = require("./Route"),
     Layer = require("./Layer");
@@ -21,6 +21,13 @@ module.exports = Router;
 
 
 function Router(path, parent) {
+
+    this.__layers = [];
+
+    this.Route = Route;
+    this.Middleware = Route;
+    this.Scope = Router;
+
     Layer.call(this, path, parent, false);
 }
 Layer.extend(Router);
@@ -31,32 +38,6 @@ Router.create = function(path, parent) {
 };
 
 RouterPrototype.__isRouter__ = true;
-
-RouterPrototype.construct = function(path, parent) {
-
-    this.__layers = [];
-
-    this.Route = Route;
-    this.Middleware = Route;
-    this.Scope = Router;
-
-    LayerPrototype.construct.call(this, path, parent, false);
-
-    return this;
-};
-
-RouterPrototype.destructor = function() {
-
-    LayerPrototype.destructor.call(this);
-
-    this.__layers = null;
-
-    this.Route = null;
-    this.Middleware = null;
-    this.Scope = null;
-
-    return this;
-};
 
 RouterPrototype.enqueue = function(queue, parentData, pathname) {
     var layers = this.__layers,
