@@ -40,7 +40,7 @@ posts.route( // "/posts"
     }
 );
 
-posts.route("/:id[0-9]", // "/posts/:id[0-9]"
+posts.route("/:id{[0-9]+}", // "/posts/:id{[0-9]+}"
     function signIn(req, res, next) {
         // sign user in
         next();
@@ -48,4 +48,12 @@ posts.route("/:id[0-9]", // "/posts/:id[0-9]"
 );
 
 
+var ctx = {
+    pathname: "/posts/1",
+    url: "http://localhost:9999/posts/1"
+};
+// call when url changes, pathname or url most be in ctx
+router.handler(ctx, function onHandle(error) {
+    // handle error if one passed all the way through the layers
+});
 ```
