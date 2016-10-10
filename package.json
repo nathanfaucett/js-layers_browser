@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/layers_browser",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "layers for the browser and node.js",
   "repository": {
     "type": "git",
@@ -48,6 +48,6 @@
     "@nathanfaucett/layer": "^0.0.3",
     "@nathanfaucett/object-filter": "^0.0.2",
     "@nathanfaucett/url_path": "^0.0.1",
-    "@nathanfaucett/url": "^0.0.2"
+    "@nathanfaucett/url": "^0.0.3"
   }
 }
